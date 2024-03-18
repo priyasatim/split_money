@@ -120,11 +120,6 @@ class _MyHomePageState extends State<SignInPage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: _handleSignIn,
-                              style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF8E24AA),
-                                // Set the background color
-                                onPrimary: Colors.white, // Set the text color
-                              ),
                               child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 44.0, top: 14, right: 44, bottom: 14),
