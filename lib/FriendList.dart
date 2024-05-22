@@ -34,8 +34,12 @@ class FriendListState extends State<FriendList> {
         body: SafeArea(
           child: Column(
             children: [
-              const Padding(
+               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: GestureDetector(
+            onTap: () {
+              _showModalBottomSheet(context);
+            },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -51,7 +55,7 @@ class FriendListState extends State<FriendList> {
                     Icon(Icons.notifications, color: Colors.black),
                   ],
                 ),
-              ),
+              ),),
               Padding(
                 padding: EdgeInsets.only(left: 16.0, top: 12.0),
                 child: Row(
@@ -247,3 +251,95 @@ class CustomListItem extends StatelessWidget {
     );
   }
 }
+
+void _showModalBottomSheet(BuildContext context) {
+  List<Map<String,dynamic>> _allUsers =[
+    {"id":1, "name":"Priya","email_id": "Priya@gmail.com","age":29},
+    {"id":2, "name":"Abc","email_id": "Priya@gmail.com","age":39},
+    {"id":3, "name":"Def","email_id": "Priya@gmail.com","age":49},
+    {"id":4, "name":"ghj","email_id": "Priya@gmail.com","age":59},
+    {"id":5, "name":"Klm","email_id": "Priya@gmail.com","age":69},
+  ];
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 200,
+        padding : EdgeInsets.only(top: 12,bottom: 12),
+        color: Colors.white,
+        child:  Column(
+          children: <Widget>[
+            CenterDot(
+              width: 200,
+              color: Colors.grey,
+            ),
+            Text('Add Friend', style: TextStyle(fontWeight: FontWeight.bold),),
+            Text('Priya@gmail.com', style: TextStyle(fontSize: 14)),
+            Text('Priya@gmail.com', style: TextStyle(fontSize: 12),),
+            Expanded(
+          child: ListView.builder(
+                itemCount: _allUsers.length,
+                itemBuilder: (context, index) => Card(
+                    key : ValueKey(_allUsers[index]["id"]),
+                    elevation: 4,
+                    child :ListTile(
+                      title: Text(_allUsers[index]['name'],style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 14),),
+                      subtitle: Text(_allUsers[index]['email_id'],style: TextStyle(color: Colors.grey,fontSize: 12),),
+                    )
+                )
+            ),),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+class CenterDotPainter extends CustomPainter {
+  final Color color;
+  final double radius;
+
+  CenterDotPainter({required this.color, this.radius = 4.0});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    double centerX = size.width / 2;
+    canvas.drawCircle(Offset(centerX, radius), radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(CenterDotPainter oldDelegate) => false;
+}
+
+class CenterDot extends StatelessWidget {
+  final double width;
+  final Color color;
+  final double radius;
+
+  CenterDot({
+    required this.width,
+    required this.color,
+    this.radius = 4.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: radius * 2,
+      child: CustomPaint(
+        painter: CenterDotPainter(
+          color: color,
+          radius: radius,
+        ),
+      ),
+    );
+  }
+}
+
+

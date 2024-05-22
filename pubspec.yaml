@@ -80,6 +80,14 @@ flutter:
      - assets/solar_add-square-broken.svg
      - assets/solar_link-circle-broken.svg
      - assets/solar_money-bag-broken.svg
+     - assets/user.png
+     - assets/smartphone.png
+     - assets/setting.png
+     - assets/help.png
+     - assets/info.png
+     - assets/thumbs.png
+     - assets/turn-off.png
+     - assets/add-group.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
