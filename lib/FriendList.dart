@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:split_money/DashedLinePainter.dart';
 import 'package:split_money/SlideSwitcher.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class FriendList extends StatefulWidget {
 }
 
 class FriendListState extends State<FriendList> {
-  List<Map<String, dynamic>> _allUsers = [
+  final List<Map<String, dynamic>> _allUsers = [
     {"id": 1, "name": "Priya", "email_id": "Priya@gmail.com", "age": 29},
     {"id": 2, "name": "Abc", "email_id": "Priya@gmail.com", "age": 39},
     {"id": 3, "name": "Def", "email_id": "Priya@gmail.com", "age": 49},
@@ -187,29 +188,41 @@ class FriendListState extends State<FriendList> {
         return SingleChildScrollView(
             child : Container(
           width: MediaQuery.of(context).size.width,
-          height: 200,
-          padding: EdgeInsets.only(top: 12, bottom: 12),
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.only(top: 6, bottom: 6),
           color: Colors.white,
           child: Column(
             children: <Widget>[
-              CenterDot(
-                width: 200,
-                color: Colors.grey,
+               Container(
+                height: 5,
+                width: 50,
+
+                 child: CustomPaint(
+                   painter: DashedLinePainter(
+                     dashSpace: 0,
+                     dashWidth: 5,
+                     color: Colors.grey[600]!
+                   ),
+                 ),
               ),
-              const Text(
+              SizedBox(height: 8),
+               const Text(
                 'Add Friend',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black54),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 8),
               Container(
                 margin: EdgeInsets.only(left: 16.0,right: 16.0),
                 child : TextField(
                   onChanged: (value) => _filterUsers(value),
                   decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(8),
                       labelText: 'Search',
                       suffixIcon: Icon(Icons.arrow_right_alt_rounded),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)))),
+                          borderSide: const BorderSide(color: Colors.red, width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)))),
                 ),
               ),
               Expanded(
