@@ -75,7 +75,7 @@ class FriendListState extends State<FriendList> {
                   onTap: () {
                     _showModalBottomSheet(context);
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Icon(Icons.person_add_alt_rounded, color: Colors.black),
@@ -107,7 +107,7 @@ class FriendListState extends State<FriendList> {
                   ],
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -122,12 +122,11 @@ class FriendListState extends State<FriendList> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[200], // Background color
-                  borderRadius: BorderRadius.circular(
-                      25), // Optional: You can adjust the border radius as needed
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 child: SlideSwitcher(
                   children: [
@@ -186,6 +185,8 @@ class FriendListState extends State<FriendList> {
       isScrollControlled: totalHeight > deviceHeight,
       builder: (BuildContext context) {
         return SingleChildScrollView(
+          child : ClipRRect(
+            borderRadius: BorderRadius.circular(25.0),
             child : Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -205,23 +206,24 @@ class FriendListState extends State<FriendList> {
                    ),
                  ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 12),
                const Text(
                 'Add Friend',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black54),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 12),
               Container(
-                margin: EdgeInsets.only(left: 16.0,right: 16.0),
+                margin: const EdgeInsets.only(left: 16.0,right: 16.0),
                 child : TextField(
                   onChanged: (value) => _filterUsers(value),
                   decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.search),
                       isDense: true,
                       contentPadding: EdgeInsets.all(8),
                       labelText: 'Search',
                       suffixIcon: Icon(Icons.arrow_right_alt_rounded),
                       border: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red, width: 0.0),
+                          borderSide: const BorderSide(color: Colors.red, width: 10.0),
                           borderRadius: BorderRadius.all(Radius.circular(25.0)))),
                 ),
               ),
@@ -277,6 +279,7 @@ class FriendListState extends State<FriendList> {
             ],
             ),
             ),
+          ),
         );
       },
     );
