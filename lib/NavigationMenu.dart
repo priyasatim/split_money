@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:split_money/FriendList.dart';
+import 'package:split_money/GroupDetails.dart';
 import 'package:split_money/GroupList.dart';
+import 'package:split_money/SettleUp.dart';
 import 'package:split_money/UserProfilePage.dart';
 
 class NavigationMenu extends StatefulWidget {
@@ -43,7 +45,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   final List<Widget> _fragments = [
     FriendList(),
-    GroupList(),
+    // GroupDetails(),
+    SettleUpDetail(),
     UserProfilePage(),
   ];
 }

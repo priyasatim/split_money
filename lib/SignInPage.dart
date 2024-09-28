@@ -30,6 +30,7 @@ class _MyHomePageState extends State<SignInPage> {
         final UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
 
+        Navigator.pushNamed(context,"/home");
         final User? user = authResult.user;
 
         // Now you have the authenticated user, you can handle the sign-in result
