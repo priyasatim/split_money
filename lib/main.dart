@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:split_money/NavigationMenu.dart';
 import 'package:split_money/SplashScreen.dart';
 
 void main() async {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(), // Use a splash screen to check authentication
-        // '/home': (context) => NavigationMenu(), // Home screen after login
+        '/home': (context) => NavigationMenu(), // Home screen after login
       },
     );;
   }

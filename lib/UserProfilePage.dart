@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:split_money/common/SharePreference.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -66,15 +68,51 @@ class UserProfileState extends State<UserProfilePage> {
             ],
           ),
           SizedBox(height: 50),
-          const Column(
+          Column(
             children: [
-              Text("Priyanka satim",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 16)),
-              Text("Priyasatim778@gmail.com",
-                  style: TextStyle(color: Colors.grey, fontSize: 12))
+              FutureBuilder<String>(
+                future: SharePreference.getName(), // Fetch the name dynamically
+                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while the name is being fetched
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // Handle errors
+                    return Text("Error fetching name", style: TextStyle(color: Colors.red));
+                  } else {
+                    // Display the name once it's fetched
+                    return Text(
+                      snapshot.data ?? 'No Name',  // Display a fallback if no data is found
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    );
+                  }
+                },
+              ),
+              FutureBuilder<String>(
+                future:  SharePreference.getEmail(), // Fetch the email dynamically
+                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while the email is being fetched
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // Handle errors
+                    return Text("Error fetching email", style: TextStyle(color: Colors.red));
+                  } else {
+                    // Display the email once it's fetched
+                    return Text(
+                      snapshot.data ?? 'No Email',  // Display a fallback if no data is found
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                    );
+                  }
+                },
+              ),
             ],
           ),
           Column(

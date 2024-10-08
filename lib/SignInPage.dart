@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:split_money/NavigationMenu.dart';
+import 'package:split_money/common/SharePreference.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -30,8 +33,10 @@ class _MyHomePageState extends State<SignInPage> {
         final UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
 
-        Navigator.pushNamed(context,"/home");
         final User? user = authResult.user;
+        await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
+
+        Navigator.pushNamed(context,"/home");
 
         // Now you have the authenticated user, you can handle the sign-in result
         print('User signed in: ${user?.displayName}');

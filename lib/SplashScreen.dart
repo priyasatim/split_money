@@ -11,13 +11,17 @@ class SplashScreen extends StatelessWidget {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
 
+    print('Email_user: $user.email');
+    print('uid_user: $user.uid');
+
     // If user is logged in, navigate to home, else to sign in page
     Future.delayed(Duration.zero, () {
-      if (user != null) {
-        _checkUserInDatabase(user.uid, context);
-      } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage())); // User is not logged in
-      }
+      // if (user != null) {
+      //   checkIfEmailExists(user.email!.trim());
+      // } else {
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) => SignInPage())); // User is not logged in
+      // }
     });
 
     return Scaffold(
@@ -38,23 +42,36 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _checkUserInDatabase(String uid, BuildContext context) async {
-    // Reference to the Realtime Database
-    DatabaseReference userRef = FirebaseDatabase.instance.ref('users/$uid');
-
-    // Check if the user exists in the database
-    userRef.once().then((DatabaseEvent event) {
-      if (event.snapshot.exists) {
-        // User exists in the database, navigate to home
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        // User does not exist in the database, navigate to sign in page
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
-      }
-    }).catchError((error) {
-      // Handle any errors
-      print('Error checking user in database: $error');
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
-    });
+  // void checkIfEmailExists(String email) async {
+  //   print("Checking email:$email");
+  //   try {
+  //     final user = await FirebaseAuth.instance.getUserByEmail(email);
+  //     if (user != null) {
+  //       print('Email exists!');
+  //     } else {
+  //       print('Email does not exist!');
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     print("FirebaseAuthException: ${e.code}"); // Added log
+  //     if (e.code == 'invalid-email') {
+  //       print('The email address is badly formatted.');
+  //     } else if (e.code == 'user-not-found') {
+  //       print('No user found for this email.');
+  //     } else {
+  //       print('An error occurred: ${e.message}');
+  //     }
+  //   } catch (error) {
+  //     print("An unexpected error occurred: $error");
+  //   }
+  // }
+  Future<bool> isEmailAuthorized(String email) async {
+    try {
+      final signInMethods =  await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+      return signInMethods.isNotEmpty;
+    } catch (e) {
+      print('Error checking email authorization: $e');
+      return false;
+    }
   }
+
 }
