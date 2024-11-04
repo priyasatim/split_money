@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:split_money/SquareAvatar.dart';
+import 'package:split_money/common/SquareAvatar.dart';
 
 void main() {
   runApp(MyApp());

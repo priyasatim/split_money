@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:split_money/FriendList.dart';
-import 'package:split_money/SquareAvatar.dart';
+import 'package:split_money/screens/FriendList.dart';
+import 'package:split_money/common/SquareAvatar.dart';
 
 void main() {
   runApp(MyApp());

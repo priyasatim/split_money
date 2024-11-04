@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:split_money/DashedLinePainter.dart';
-import 'package:split_money/SlideSwitcher.dart';
+import 'package:split_money/common/DashedLinePainter.dart';
+import 'package:split_money/common/SlideSwitcher.dart';
 
 void main() {
   runApp(MyApp());

@@ -5,9 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:split_money/NavigationMenu.dart';
-import 'package:split_money/common/SharePreference.dart';
+import 'package:split_money/data/UserData.dart';
+import 'package:split_money/repository/UserRepository.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -34,7 +33,12 @@ class _MyHomePageState extends State<SignInPage> {
         await FirebaseAuth.instance.signInWithCredential(credential);
 
         final User? user = authResult.user;
-        await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
+      //  await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
+
+
+        final userData = UserData(name: user?.displayName ?? "", email: user?.email ?? "");
+        UserRepository.instance.createUser(userData);
+
 
         Navigator.pushNamed(context,"/home");
 
@@ -223,3 +227,4 @@ class _MyHomePageState extends State<SignInPage> {
         ));
   }
 }
+

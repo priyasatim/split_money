@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:split_money/FriendList.dart';
-import 'package:split_money/GroupDetails.dart';
-import 'package:split_money/GroupList.dart';
-import 'package:split_money/SettleUp.dart';
-import 'package:split_money/UserProfilePage.dart';
+import 'package:split_money/screens/FriendList.dart';
+import 'package:split_money/screens/GroupDetails.dart';
+import 'package:split_money/screens/GroupList.dart';
+import 'package:split_money/screens/SettleUp.dart';
+import 'package:split_money/screens/UserProfilePage.dart';
 
 class NavigationMenu extends StatefulWidget {
 
