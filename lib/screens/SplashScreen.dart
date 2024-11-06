@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +37,15 @@ class SplashScreen extends StatefulWidget {
   //     print("An unexpected error occurred: $error");
   //   }
   }
-  Future<bool> isEmailAuthorized(String email) async {
-    try {
-      final signInMethods =  await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-      return signInMethods.isNotEmpty;
-    } catch (e) {
-      print('Error checking email authorization: $e');
-      return false;
-    }
-  }
+  // Future<bool> isEmailAuthorized(String email) async {
+  //   try {
+  //     final signInMethods =  await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+  //     return signInMethods.isNotEmpty;
+  //   } catch (e) {
+  //     print('Error checking email authorization: $e');
+  //     return false;
+  //   }
+  // }
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
@@ -88,12 +88,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     // Check if the user is already signed in
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    print('Email_user: $user.email');
-    print('uid_user: $user.uid');
-
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
+    //
+    // print('Email_user: $user.email');
+    // print('uid_user: $user.uid');
+    //
 
     return Scaffold(
       body: Center(

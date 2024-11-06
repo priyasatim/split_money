@@ -1,10 +1,12 @@
-
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:split_money/bloc/internet_bloc/internet_bloc.dart';
+import 'package:split_money/bloc/internet_bloc/internet_event.dart';
+import 'package:split_money/bloc/internet_bloc/internet_state.dart';
 import 'package:split_money/data/UserData.dart';
 import 'package:split_money/repository/UserRepository.dart';
 
@@ -19,31 +21,30 @@ class _MyHomePageState extends State<SignInPage> {
   Future<void> _handleSignIn() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
-      await GoogleSignIn().signIn();
+          await GoogleSignIn().signIn();
       final GoogleSignInAuthentication? googleSignInAuthentication =
-      await googleSignInAccount?.authentication;
+          await googleSignInAccount?.authentication;
 
       if (googleSignInAuthentication != null) {
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
+        // final AuthCredential credential = GoogleAuthProvider.credential(
+        //   accessToken: googleSignInAuthentication.accessToken,
+        //   idToken: googleSignInAuthentication.idToken,
+        // );
 
-        final UserCredential authResult =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        // final UserCredential authResult =
+        //     await FirebaseAuth.instance.signInWithCredential(credential);
+        //
+        // final User? user = authResult.user;
+        //  await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
 
-        final User? user = authResult.user;
-      //  await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
+        // final userData =
+        //     UserData(name: user?.displayName ?? "", email: user?.email ?? "");
+        // UserRepository.instance.createUser(userData);
 
-
-        final userData = UserData(name: user?.displayName ?? "", email: user?.email ?? "");
-        UserRepository.instance.createUser(userData);
-
-
-        Navigator.pushNamed(context,"/home");
+        Navigator.pushNamed(context, "/home");
 
         // Now you have the authenticated user, you can handle the sign-in result
-        print('User signed in: ${user?.displayName}');
+        // print('User signed in: ${user?.displayName}');
       }
     } catch (error) {
       // Handle sign-in errors
@@ -62,11 +63,13 @@ class _MyHomePageState extends State<SignInPage> {
               padding: EdgeInsets.only(top: 24.0, right: 24),
               child: Text(
                 'Skip',
-                style:
-                GoogleFonts.roboto(color: Color(0xFF8E24AA), fontSize: 12, fontFeatures: [
-                  const FontFeature.enable('smcp'), // Enable small caps
-                  const FontFeature.enable('frac'), // Enable fractions
-                ]),
+                style: GoogleFonts.roboto(
+                    color: Color(0xFF8E24AA),
+                    fontSize: 12,
+                    fontFeatures: [
+                      const FontFeature.enable('smcp'), // Enable small caps
+                      const FontFeature.enable('frac'), // Enable fractions
+                    ]),
               ),
             ),
           ),
@@ -76,7 +79,7 @@ class _MyHomePageState extends State<SignInPage> {
         body: Column(
           children: [
             Expanded(
-                child : Padding(
+                child: Padding(
                     padding: EdgeInsets.only(top: 74),
                     child: Container(
                       child: Column(children: [
@@ -87,10 +90,13 @@ class _MyHomePageState extends State<SignInPage> {
                               style: GoogleFonts.roboto(
                                   color: const Color(0xFF696969),
                                   fontSize: 24,
-                                  fontWeight: FontWeight.bold, fontFeatures: [
-                                const FontFeature.enable('smcp'), // Enable small caps
-                                const FontFeature.enable('frac'), // Enable fractions
-                              ]),
+                                  fontWeight: FontWeight.bold,
+                                  fontFeatures: [
+                                    const FontFeature.enable('smcp'),
+                                    // Enable small caps
+                                    const FontFeature.enable('frac'),
+                                    // Enable fractions
+                                  ]),
                               children: <TextSpan>[
                                 TextSpan(
                                     text: ' Buddy',
@@ -99,20 +105,25 @@ class _MyHomePageState extends State<SignInPage> {
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                         fontFeatures: [
-                                          const FontFeature.enable('smcp'), // Enable small caps
-                                          const FontFeature.enable('frac'), // Enable fractions
+                                          const FontFeature.enable('smcp'),
+                                          // Enable small caps
+                                          const FontFeature.enable('frac'),
+                                          // Enable fractions
                                         ]))
                               ]),
                         ),
                         SizedBox(height: 4),
-                        Text('| Manage Group Expenses | Manage Personal Expenses',
+                        Text(
+                            '| Manage Group Expenses | Manage Personal Expenses',
                             style: GoogleFonts.roboto(
                                 color: const Color(0xFF808080),
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 fontFeatures: [
-                                  const FontFeature.enable('smcp'), // Enable small caps
-                                  const FontFeature.enable('frac'), // Enable fractions
+                                  const FontFeature.enable('smcp'),
+                                  // Enable small caps
+                                  const FontFeature.enable('frac'),
+                                  // Enable fractions
                                 ]),
                             textAlign: TextAlign.center),
                         SizedBox(width: 8.0, height: 50),
@@ -128,30 +139,44 @@ class _MyHomePageState extends State<SignInPage> {
                           padding: EdgeInsets.only(left: 42, right: 42),
                           child: SizedBox(
                             width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _handleSignIn,
-                              child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 44.0, top: 14, right: 44, bottom: 14),
-                                  child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          'assets/google.png',
-                                          width: 16,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Continue with Google',
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 12,
-                                              fontFeatures: [
-                                                const FontFeature.enable('smcp'), // Enable small caps
-                                                const FontFeature.enable('frac'), // Enable fractions
-                                              ]
-                                          ),
-                                        ),
-                                      ])),
+                            child: BlocBuilder<InternetBloc, InternetState>(
+                              builder: (context, state) {
+                                return ElevatedButton(
+                                  onPressed: () async {
+                                    if(state is InternetGainState){
+                                      _handleSignIn;
+                                    }
+                                  },
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 44.0,
+                                          top: 14,
+                                          right: 44,
+                                          bottom: 14),
+                                      child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Image.asset(
+                                              'assets/google.png',
+                                              width: 16,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Continue with Google',
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 12,
+                                                  fontFeatures: [
+                                                    const FontFeature.enable(
+                                                        'smcp'),
+                                                    // Enable small caps
+                                                    const FontFeature.enable(
+                                                        'frac'),
+                                                    // Enable fractions
+                                                  ]),
+                                            ),
+                                          ])),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -159,9 +184,14 @@ class _MyHomePageState extends State<SignInPage> {
                         Text(
                           "Need Help?",
                           style: GoogleFonts.roboto(
-                              fontSize: 12, color: Colors.grey, fontFeatures: [const FontFeature.enable('smcp'), // Enable small caps
-                            const FontFeature.enable('frac'), // Enable fractions
-                          ]),
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontFeatures: [
+                                const FontFeature.enable('smcp'),
+                                // Enable small caps
+                                const FontFeature.enable('frac'),
+                                // Enable fractions
+                              ]),
                         ),
                         SizedBox(height: 25),
                         Row(
@@ -173,10 +203,13 @@ class _MyHomePageState extends State<SignInPage> {
                             Text(
                               "Privacy Policy?",
                               style: GoogleFonts.roboto(
-                                  fontSize: 12, color: Color(0xFF8E24AA),
+                                  fontSize: 12,
+                                  color: Color(0xFF8E24AA),
                                   fontFeatures: [
-                                    const FontFeature.enable('smcp'), // Enable small caps
-                                    const FontFeature.enable('frac'), // Enable fractions
+                                    const FontFeature.enable('smcp'),
+                                    // Enable small caps
+                                    const FontFeature.enable('frac'),
+                                    // Enable fractions
                                   ]),
                             ),
                             SizedBox(width: 12),
@@ -186,10 +219,14 @@ class _MyHomePageState extends State<SignInPage> {
                             Text(
                               "Terms & Condition",
                               style: GoogleFonts.roboto(
-                                  fontSize: 12, color: Color(0xFF8E24AA), fontFeatures: [
-                                const FontFeature.enable('smcp'), // Enable small caps
-                                const FontFeature.enable('frac'), // Enable fractions
-                              ]),
+                                  fontSize: 12,
+                                  color: Color(0xFF8E24AA),
+                                  fontFeatures: [
+                                    const FontFeature.enable('smcp'),
+                                    // Enable small caps
+                                    const FontFeature.enable('frac'),
+                                    // Enable fractions
+                                  ]),
                             )
                           ],
                         ),
@@ -223,8 +260,8 @@ class _MyHomePageState extends State<SignInPage> {
                   ],
                 ),
               ),
-            )    ],
+            )
+          ],
         ));
   }
 }
-
