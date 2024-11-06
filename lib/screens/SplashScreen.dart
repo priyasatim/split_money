@@ -1,13 +1,13 @@
 import 'dart:io';
 
 // import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:split_money/screens/SignInPage.dart';
-import 'package:firebase_database/firebase_database.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:split_money/repository/UserRepository.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -51,39 +51,39 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    initializeFirebase();
+    // initializeFirebase();
   }
 
-  Future<void> initializeFirebase() async {
-    // Firebase is initialized
-    if (Platform.isAndroid) {
-      await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: 'AIzaSyA4D0RgJjVJhmXTb8t_fXxSoSVtEGd7BIc',
-          appId: '1:604135319001:android:a8eaf9674985659161a5c8',
-          messagingSenderId: '604135319001',
-          projectId: 'flutter--signin-7d42f',
-        ),
-      );
-
-      // Register your UserRepository or other controllers
-      Get.put(UserRepository()); // Register the UserRepository globally
-    } else {
-      await Firebase.initializeApp();
-      // Register your UserRepository or other controllers
-      Get.put(UserRepository()); // Register the UserRepository globally
-    }
-
-    // If user is logged in, navigate to home, else to sign in page
-    Future.delayed(Duration.zero, () {
-      // if (user != null) {
-      //   checkIfEmailExists(user.email!.trim());
-      // } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) => SignInPage())); // User is not logged in
-      // }
-    });
-  }
+  // Future<void> initializeFirebase() async {
+  //   // Firebase is initialized
+  //   if (Platform.isAndroid) {
+  //     await Firebase.initializeApp(
+  //       options: const FirebaseOptions(
+  //         apiKey: 'AIzaSyA4D0RgJjVJhmXTb8t_fXxSoSVtEGd7BIc',
+  //         appId: '1:604135319001:android:a8eaf9674985659161a5c8',
+  //         messagingSenderId: '604135319001',
+  //         projectId: 'flutter--signin-7d42f',
+  //       ),
+  //     );
+  //
+  //     // Register your UserRepository or other controllers
+  //     Get.put(UserRepository()); // Register the UserRepository globally
+  //   } else {
+  //     await Firebase.initializeApp();
+  //     // Register your UserRepository or other controllers
+  //     Get.put(UserRepository()); // Register the UserRepository globally
+  //   }
+  //
+  //   // If user is logged in, navigate to home, else to sign in page
+  //   Future.delayed(Duration.zero, () {
+  //     // if (user != null) {
+  //     //   checkIfEmailExists(user.email!.trim());
+  //     // } else {
+  //     Navigator.pushReplacement(context, MaterialPageRoute(
+  //         builder: (context) => SignInPage())); // User is not logged in
+  //     // }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
