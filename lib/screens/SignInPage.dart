@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:split_money/bloc/internet_bloc/internet_bloc.dart';
 import 'package:split_money/bloc/internet_bloc/internet_event.dart';
 import 'package:split_money/bloc/internet_bloc/internet_state.dart';
+import 'package:split_money/common/SharePreference.dart';
 import 'package:split_money/data/UserData.dart';
 import 'package:split_money/repository/UserRepository.dart';
 
@@ -26,25 +28,25 @@ class _MyHomePageState extends State<SignInPage> {
           await googleSignInAccount?.authentication;
 
       if (googleSignInAuthentication != null) {
-        // final AuthCredential credential = GoogleAuthProvider.credential(
-        //   accessToken: googleSignInAuthentication.accessToken,
-        //   idToken: googleSignInAuthentication.idToken,
-        // );
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
 
-        // final UserCredential authResult =
-        //     await FirebaseAuth.instance.signInWithCredential(credential);
-        //
-        // final User? user = authResult.user;
-        //  await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
+        final UserCredential authResult =
+            await FirebaseAuth.instance.signInWithCredential(credential);
 
-        // final userData =
-        //     UserData(name: user?.displayName ?? "", email: user?.email ?? "");
-        // UserRepository.instance.createUser(userData);
+        final User? user = authResult.user;
+         await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
+
+        final userData =
+            UserData(name: user?.displayName ?? "", email: user?.email ?? "");
+        UserRepository.instance.createUser(userData);
 
         Navigator.pushNamed(context, "/home");
 
         // Now you have the authenticated user, you can handle the sign-in result
-        // print('User signed in: ${user?.displayName}');
+        print('User signed in: ${user?.displayName}');
       }
     } catch (error) {
       // Handle sign-in errors
@@ -144,7 +146,7 @@ class _MyHomePageState extends State<SignInPage> {
                                 return ElevatedButton(
                                   onPressed: () async {
                                     if(state is InternetGainState){
-                                      _handleSignIn;
+                                      _handleSignIn();
                                     }
                                   },
                                   child: Padding(

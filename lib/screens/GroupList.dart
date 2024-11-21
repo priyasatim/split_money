@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -18,51 +17,69 @@ class MyApp extends StatelessWidget {
 }
 
 class GroupList extends StatefulWidget {
-
   @override
   State<GroupList> createState() => GroupState();
 }
 
-
 class GroupState extends State<GroupList> {
   @override
   Widget build(BuildContext context) {
-    final List<String> items =
-    List<String>.generate(100, (index) => "Item $index");
+    final List<String> items = [];
 
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: const Row(
+          title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Icon(Icons.group_add_outlined, color: Colors.black),),
-              Padding(padding: EdgeInsets.only(left: 8.0,right: 8.0),
-                  child : Text("Groups",
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: items.isNotEmpty
+                    ? Icon(Icons.group_add_outlined, color: Colors.black)
+                    : SizedBox(),
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: Text(
+                    "Groups",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                    ),)
+                    ),
+                  )),
+              const Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Icon(Icons.notifications_outlined, color: Colors.black),
               ),
-              Padding(padding: EdgeInsets.only(left: 8.0,right: 8.0),
-                child: Icon(Icons.notifications_outlined, color: Colors.black),),
             ],
           ),
-
         ),
-        body : Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _buildItemsWithDividers(items),
-
-              ),
-
-            ))
-    );
+        body: Expanded(
+          child: items.isNotEmpty
+              ? SingleChildScrollView(
+                  child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _buildItemsWithDividers(items),
+                ))
+              : Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'No Group, Create Now',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                        SizedBox(
+                            height: 16), // Add spacing between text and button
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('Create New Group'),
+                        ),
+                      ]),
+                ),
+        ));
   }
 }
 
@@ -86,12 +103,12 @@ List<Widget> _buildItemsWithDividers(List<String> items) {
     if (i < items.length - 1) {
       widgets.add(
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding around the divider
-            child:   Divider(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            // Add padding around the divider
+            child: Divider(
               color: Colors.grey.shade300,
               thickness: 1,
             )),
-
       );
     }
   }
@@ -134,35 +151,32 @@ class CustomListItem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Row(
-                      children : [
-                        Positioned(
-                          left: 0,
-                          top: 0,
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/profile.png',
-                              width: 30,
-                              height: 30,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                  Row(children: [
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/profile.png',
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.cover,
                         ),
-                        Positioned(
-                          left: -30,
-                          top: -30,
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/profile.png',
-                              width: 30,
-                              height: 30,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                      ),
+                    ),
+                    Positioned(
+                      left: -30,
+                      top: -30,
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/profile.png',
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.cover,
                         ),
-
-                      ]
-                  ),
+                      ),
+                    ),
+                  ]),
                   SizedBox(height: 4),
                   Text(
                     subtitle,
@@ -176,29 +190,28 @@ class CustomListItem extends StatelessWidget {
             ),
             const Positioned(
                 child: Column(
-                  children: [
-                    Text(
-                      'you owe', // Add your additional text here
-                      style: TextStyle(
-                        color: Colors.grey, // Adjust color as needed
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '-₹124', // Add your additional text here
-                      style: TextStyle(
-                        color: Colors.red, // Adjust color as needed
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ))
+              children: [
+                Text(
+                  'you owe', // Add your additional text here
+                  style: TextStyle(
+                    color: Colors.grey, // Adjust color as needed
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '-₹124', // Add your additional text here
+                  style: TextStyle(
+                    color: Colors.red, // Adjust color as needed
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ))
           ],
         ),
       ),
     );
   }
 }
-

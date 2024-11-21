@@ -45,8 +45,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   final List<Widget> _fragments = [
     FriendList(),
-    // GroupDetails(),
-    SettleUpDetail(),
+    GroupList(),
     UserProfilePage(),
   ];
 }

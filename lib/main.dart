@@ -27,12 +27,10 @@ class MyApp extends StatelessWidget {
         title: 'Your App',
         initialRoute: '/',
         routes: {
-          '/': (context) => SignInPage(),
-          // Use a splash screen to check authentication
+          '/': (context) => SplashScreen(),
           '/home': (context) => NavigationMenu(),
-          // Home screen after login
         },
       ),
-    );;
+    );
   }
 }

@@ -37,6 +37,7 @@ dependencies:
 
   # UI package
   google_fonts: ^6.2.1
+  fluttertoast: ^8.2.1
 
   # Local storage
   shared_preferences: ^2.0.6
