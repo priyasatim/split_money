@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,6 +44,13 @@ class _MyHomePageState extends State<SignInPage> {
             UserData(name: user?.displayName ?? "", email: user?.email ?? "");
         UserRepository.instance.createUser(userData);
 
+        String userId = "1"; // Replace with the actual user ID
+        Map<String, dynamic> userDetails = {
+          'name': user?.displayName ?? "",
+          'email': user?.email ?? "",
+        };
+
+        addUserDetailsToFirestore(userId,userDetails);
         Navigator.pushNamed(context, "/home");
 
         // Now you have the authenticated user, you can handle the sign-in result
@@ -51,6 +59,20 @@ class _MyHomePageState extends State<SignInPage> {
     } catch (error) {
       // Handle sign-in errors
       print('Error signing in with Google: $error');
+    }
+  }
+
+  Future<void> addUserDetailsToFirestore(String userId, Map<String, dynamic> userDetails) async {
+    try {
+      // Reference to the users collection
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+      // Set user details in the Firestore document with the given userId
+      await users.doc(userId).set(userDetails);
+
+      print('User details added successfully!');
+    } catch (e) {
+      print('Error adding user details: $e');
     }
   }
 

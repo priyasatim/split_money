@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:split_money/bloc/internet_bloc/internet_bloc.dart';
@@ -303,7 +304,7 @@ class FriendListState extends State<FriendList>
                             fontSize: 16,
                             color: Colors.black),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 14),
                       Container(
                         margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                         child: TextField(
@@ -348,8 +349,7 @@ class FriendListState extends State<FriendList>
                                     children: <Widget>[
                                       GestureDetector(
                                         onTap: () {
-                                          print(
-                                              'Text pressed for user: ${_filteredUsers[index]['name']}');
+                                          addItemToUserList("1",_filteredUsers[index]['name']);
                                         },
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
@@ -360,7 +360,7 @@ class FriendListState extends State<FriendList>
                                                 BorderRadius.circular(4),
                                           ),
                                           child: Text(
-                                            'Add Friend',
+                                            'Add',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
@@ -379,6 +379,29 @@ class FriendListState extends State<FriendList>
             ));
       },
     );
+  }
+
+  Future<void> addItemToUserList(String userId, String newItem) async {
+    try {
+      // Reference to the user's document
+      DocumentReference userDoc =
+      FirebaseFirestore.instance.collection('users').doc(userId);
+
+      // Check if the document exists
+      DocumentSnapshot docSnapshot = await userDoc.get();
+      if (docSnapshot.exists) {
+        print('User already exists.');
+      } else {
+        // Update the friends list using arrayUnion
+        await userDoc.update({
+          'friends': FieldValue.arrayUnion([newItem]), // Adds item if not already in the list
+        });
+        print('Item added successfully!');
+      }
+
+    } catch (e) {
+      print('Error adding item: $e');
+    }
   }
 }
 
@@ -558,3 +581,4 @@ class CenterDot extends StatelessWidget {
     );
   }
 }
+
