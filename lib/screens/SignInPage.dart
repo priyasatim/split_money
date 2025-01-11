@@ -13,6 +13,8 @@ import 'package:split_money/common/SharePreference.dart';
 import 'package:split_money/data/UserData.dart';
 import 'package:split_money/repository/UserRepository.dart';
 
+import 'NavigationMenu.dart';
+
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
@@ -40,18 +42,15 @@ class _MyHomePageState extends State<SignInPage> {
         final User? user = authResult.user;
          await SharePreference.saveData(user?.displayName ?? "", user?.email ?? "");
 
-        final userData =
-            UserData(name: user?.displayName ?? "", email: user?.email ?? "");
-        UserRepository.instance.createUser(userData);
+        final userData = UserData(name: user?.displayName ?? "", email: user?.email ?? "",  isLogin: true);
+        UserRepository.instance.createUserAndFriend(userData);
 
-        String userId = "1"; // Replace with the actual user ID
-        Map<String, dynamic> userDetails = {
-          'name': user?.displayName ?? "",
-          'email': user?.email ?? "",
-        };
-
-        addUserDetailsToFirestore(userId,userDetails);
-        Navigator.pushNamed(context, "/home");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavigationMenu(), // User is logged in, navigate to home
+          ),
+        );
 
         // Now you have the authenticated user, you can handle the sign-in result
         print('User signed in: ${user?.displayName}');
@@ -62,15 +61,15 @@ class _MyHomePageState extends State<SignInPage> {
     }
   }
 
-  Future<void> addUserDetailsToFirestore(String userId, Map<String, dynamic> userDetails) async {
+  Future<void> addUserDetailsToFirestore(Map<String, dynamic> userDetails) async {
     try {
       // Reference to the users collection
       CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-      // Set user details in the Firestore document with the given userId
-      await users.doc(userId).set(userDetails);
+      // Add a new document with an auto-generated ID
+      DocumentReference docRef = await users.add(userDetails);
 
-      print('User details added successfully!');
+      print('User details added successfully with ID: ${docRef.id}');
     } catch (e) {
       print('Error adding user details: $e');
     }

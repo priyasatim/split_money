@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:split_money/screens/NavigationMenu.dart';
 import 'package:split_money/screens/SignInPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:split_money/repository/UserRepository.dart';
@@ -14,38 +17,7 @@ class SplashScreen extends StatefulWidget {
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
-
-  // void checkIfEmailExists(String email) async {
-  //   print("Checking email:$email");
-  //   try {
-  //     final user = await FirebaseAuth.instance.getUserByEmail(email);
-  //     if (user != null) {
-  //       print('Email exists!');
-  //     } else {
-  //       print('Email does not exist!');
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     print("FirebaseAuthException: ${e.code}"); // Added log
-  //     if (e.code == 'invalid-email') {
-  //       print('The email address is badly formatted.');
-  //     } else if (e.code == 'user-not-found') {
-  //       print('No user found for this email.');
-  //     } else {
-  //       print('An error occurred: ${e.message}');
-  //     }
-  //   } catch (error) {
-  //     print("An unexpected error occurred: $error");
-  //   }
-  }
-  // Future<bool> isEmailAuthorized(String email) async {
-  //   try {
-  //     final signInMethods =  await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-  //     return signInMethods.isNotEmpty;
-  //   } catch (e) {
-  //     print('Error checking email authorization: $e');
-  //     return false;
-  //   }
-  // }
+}
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
@@ -74,27 +46,32 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.put(UserRepository()); // Register the UserRepository globally
     }
 
-    // If user is logged in, navigate to home, else to sign in page
-    Future.delayed(Duration.zero, () {
-      // if (user != null) {
-      //   checkIfEmailExists(user.email!.trim());
-      // } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) => SignInPage())); // User is not logged in
-      // }
-    });
+      bool isLoggedIn = await checkLoginState();
+      print('isLoggedIn: ${isLoggedIn}');
+
+      // Navigate based on whether the user is logged in
+      if (isLoggedIn) {
+        // User is logged in, navigate to the home page (NavigationMenu)
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavigationMenu(), // User is logged in, navigate to home
+          ),
+        );
+      } else {
+        // User is not logged in, navigate to the sign-in page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SignInPage(), // User is not logged in, navigate to login
+          ),
+        );
+      }
+
   }
 
   @override
   Widget build(BuildContext context) {
-    // Check if the user is already signed in
-    // FirebaseAuth auth = FirebaseAuth.instance;
-    // User? user = auth.currentUser;
-    //
-    // print('Email_user: $user.email');
-    // print('uid_user: $user.uid');
-    //
-
     return Scaffold(
       body: Center(
         child: Column(
@@ -111,5 +88,31 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  Future<bool> checkLoginState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');  // Get email from SharedPreferences
+
+    print("Email from SharedPreferences: $email");
+
+    if (email == null) {
+      return false;
+    } else {
+      // Query Firestore to check if 'isLogin' is true for this email
+      CollectionReference users = FirebaseFirestore.instance.collection('Users');
+      QuerySnapshot querySnapshot = await users.where('email', isEqualTo: email).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the first matching document
+        DocumentSnapshot userSnapshot = querySnapshot.docs.first;
+
+        print("Firestore isLogin value: ${userSnapshot['isLogin']}");
+
+        return userSnapshot['isLogin'] ?? false;
+      } else {
+        return false;
+      }
+    }
   }
 }

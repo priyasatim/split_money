@@ -54,6 +54,7 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_database: ^11.1.4  # Realtime database support
   cloud_firestore: ^5.4.4 # Firestore database support
+  uuid: ^3.0.4
 
   # Other Utilities
   google_sign_in: ^6.2.1  # Google Sign-In for authentication

@@ -6,6 +6,8 @@ import 'package:split_money/bloc/internet_bloc/internet_state.dart';
 import 'package:split_money/common/DashedLinePainter.dart';
 import 'package:split_money/common/SlideSwitcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:split_money/repository/UserRepository.dart';
+import 'package:split_money/screens/AddExpenses.dart';
 
 void main() {
   runApp(MyApp());
@@ -154,7 +156,7 @@ class FriendListState extends State<FriendList>
                   },
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 16.0, top: 12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -249,7 +251,24 @@ class FriendListState extends State<FriendList>
                     },
                   );
                 },
-              )
+              ) ,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return AddExpensesScreen();
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50), // Full-width button
+                  ),
+                  child: const Text('Add Expense'),
+                ),
+              ),
             ],
           ),
         ),
@@ -349,7 +368,16 @@ class FriendListState extends State<FriendList>
                                     children: <Widget>[
                                       GestureDetector(
                                         onTap: () {
-                                          addItemToUserList("1",_filteredUsers[index]['name']);
+                                          try {
+                                            // Now call the updateUserFriendList function to add the friend
+                                            UserRepository.instance
+                                                .addFriendAfterLogin(
+                                                    "pr@gmail.com", "1");
+                                          } catch (error) {
+                                            // Handle errors
+                                            print(
+                                                "Error in processFriendAddition: $error");
+                                          }
                                         },
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
@@ -379,29 +407,6 @@ class FriendListState extends State<FriendList>
             ));
       },
     );
-  }
-
-  Future<void> addItemToUserList(String userId, String newItem) async {
-    try {
-      // Reference to the user's document
-      DocumentReference userDoc =
-      FirebaseFirestore.instance.collection('users').doc(userId);
-
-      // Check if the document exists
-      DocumentSnapshot docSnapshot = await userDoc.get();
-      if (docSnapshot.exists) {
-        print('User already exists.');
-      } else {
-        // Update the friends list using arrayUnion
-        await userDoc.update({
-          'friends': FieldValue.arrayUnion([newItem]), // Adds item if not already in the list
-        });
-        print('Item added successfully!');
-      }
-
-    } catch (e) {
-      print('Error adding item: $e');
-    }
   }
 }
 
@@ -581,4 +586,3 @@ class CenterDot extends StatelessWidget {
     );
   }
 }
-

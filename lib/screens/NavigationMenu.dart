@@ -23,10 +23,17 @@ class _NavigationMenuState extends State<NavigationMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _fragments,
+      body: Stack(
+        children: [
+          // The body content (IndexedStack)
+          IndexedStack(
+            index: _selectedIndex,
+            children: _fragments,
+          ),
+        ],
       ),
+
+      // BottomNavigationBar
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onItemTapped,
         currentIndex: _selectedIndex,
@@ -42,6 +49,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       ),
     );
   }
+
 
   final List<Widget> _fragments = [
     FriendList(),
